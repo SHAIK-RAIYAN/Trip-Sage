@@ -1,0 +1,22 @@
+{
+  "name": "trip-sage",
+  "version": "1.0.0",
+  "description": "Ai based travel planner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SHAIK-RAIYAN/Trip-Sage.git"
+  },
+  "author": "SHAIK RAIYAN",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SHAIK-RAIYAN/Trip-Sage/issues"
+  },
+  "homepage": "https://github.com/SHAIK-RAIYAN/Trip-Sage#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
