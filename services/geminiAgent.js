@@ -11,9 +11,9 @@ You're a professional travel agent AI assistant.
 Create a **professionally formatted** and **structured** day-wise travel itinerary in **Markdown syntax**.
 
 Requirements:
-- Use **headings** for each day (e.g., ## Day 1 - Arrival)
+- Use **headings** for each day (e.g., ## Day 1 (01-04-2026)- Arrival)
 - Use **bold text** for time blocks (e.g., **Morning**, **Afternoon**, **Evening**)
-- Add **newlines between time blocks**
+- Add **newlines between day and time blocks**
 - Use **bullet points** under each time block
 - Add spacing between sections for readability
 
