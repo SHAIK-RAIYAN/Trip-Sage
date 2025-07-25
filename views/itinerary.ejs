@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TripSage · Itinerary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <header class="text-gray-600 body-font bg-white shadow fixed-top">
+      <div
+        class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a
+          href="/"
+          class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <!-- Logo SVG here -->
+          <img
+            src="/Images/traveler-with-a-suitcase-svgrepo-com.png"
+            alt="tripsage"
+            class="h-10 w-auto" />
+          <span class="ml-3 text-2xl font-bold">TripSage</span>
+        </a>
+      </div>
+    </header>
+    <main>
+      <div class="container mx-auto px-6 py-8">
+        <a href="/plan-trip" class="text-indigo-600 underline mb-6 inline-block"
+          >← Plan Another Trip</a
+        >
+        <h1 class="text-3xl font-bold mb-4">Your Trip Itinerary</h1>
+        <div class="bg-white p-6 rounded-lg shadow-lg prose max-w-none">
+          <%- itinerary %>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
