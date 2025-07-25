@@ -6,6 +6,8 @@ const sanitizeHtml = require("sanitize-html");
 
 // your AI orchestrator (stub for now)
 const { generateItinerary } = require("./services/geminiAgent");
+const { fetchBestFlights } = require("./services/flightService");
+const getAirportData = require("./utils/getAirportData");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,6 +36,7 @@ app.post("/api/plan", async (req, res) => {
       budget,
       travelers,
       interests: interestsCsv,
+      includeTransport, //include flight details
     } = req.body;
 
     // Parse interests into an array
@@ -44,10 +47,22 @@ app.post("/api/plan", async (req, res) => {
           .filter(Boolean)
       : [];
 
-    // Build tripData payload
-    const tripData = {
-      source,
-      destination,
+    // Spell‑correct & resolve airport data
+    const srcData = getAirportData(source);
+    const dstData = getAirportData(destination);
+
+    if (!srcData || !dstData) {
+      return res
+        .status(400)
+        .send(
+          "Unable to resolve your source/destination. Please check spelling."
+        );
+    }
+
+    // Build two separate payloads
+    const tripDataItinerary = {
+      source: srcData.city,
+      destination: dstData.city,
       startDate,
       endDate,
       budget: Number(budget),
@@ -55,16 +70,30 @@ app.post("/api/plan", async (req, res) => {
       interests,
     };
 
-    // Call your Gemini agent
-    const markdown = await generateItinerary(tripData);
-    const itineraryHTML = marked.parse(markdown); //Converts Markdown to HTML.
-    const safeHTML = sanitizeHtml(itineraryHTML); //Gemini may return malicious HTML sanitize-html strips unsafe tags and attributes
-    res.render("itinerary", { itinerary: safeHTML });
+    const tripDataFlights = {
+      source: srcData.iata,
+      destination: dstData.iata,
+      startDate,
+      endDate,
+    };
+
+    //fetch flights
+    let flights = [];
+    if (includeTransport === "on") {
+      flights = await fetchBestFlights(tripDataFlights);
+    }
+
+    // Call your Gemini agent - Generate itinerary markdown
+    const markdown = await generateItinerary(tripDataItinerary);
+    const htmlItinerary = marked.parse(markdown); //Converts Markdown to HTML.
+    const safeItinerary = sanitizeHtml(htmlItinerary); //Gemini may return malicious HTML sanitize-html strips unsafe tags and attributes
+    // Render the view
+    res.render("itinerary", { itinerary: safeItinerary, flights });
   } catch (err) {
-    console.error("Error generating itinerary:", err);
+    console.error("TripSage error:", err);
     return res
       .status(500)
-      .json({ success: false, message: "Failed to generate itinerary." });
+      .send("Internal Server Error");
   }
 });
 
