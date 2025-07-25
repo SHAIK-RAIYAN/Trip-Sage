@@ -32,6 +32,56 @@
           <%- itinerary %>
         </div>
       </div>
+
+      <% if (flights && flights.length) { %>
+        <div class="container mx-auto px-6 py-4">
+      <section class="my-8 px-4">
+        <h2 class="text-2xl font-semibold mb-4">Best Flight Options</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white rounded-lg shadow overflow-hidden">
+            <thead class="bg-black text-white">
+              <tr>
+                <th class="px-6 py-3 text-left">Option</th>
+                <th class="px-6 py-3 text-left">Price (₹)</th>
+                <th class="px-6 py-3 text-left">Duration</th>
+                <th class="px-6 py-3 text-left">Airline</th>
+                <th class="px-6 py-3 text-left">Flight No.</th>
+                <th class="px-6 py-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let count = 1; %> <% flights.forEach(group => { group.flights.forEach(f => { %>
+              <tr class="<%= (count % 2 === 0) ? 'bg-gray-100' : 'bg-white' %>">
+                <td class="px-6 py-4 font-medium"><%= count++ %></td>
+                <td class="px-6 py-4">₹<%= group.price %></td>
+                <td class="px-6 py-4">
+                  <% const hrs = Math.floor(f.duration / 60); const mins = f.duration % 60; %> 
+                  <%= `${hrs}h ${mins}m` %>
+                </td>
+                <td class="px-6 py-4 flex items-center gap-2">
+                  <img
+                    src="<%= f.airline_logo %>"
+                    alt=""
+                    class="h-6 w-6 object-contain" />
+                  <span><%= f.airline %></span>
+                </td>
+                <td class="px-6 py-4"><%= f.flight_number %></td>
+                <td class="px-6 py-4">
+                  <a
+                    href="https://www.google.com/flights?btn=buy&booking_token=<%= group.booking_token %>"
+                    target="_blank"
+                    class="inline-block bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">
+                    Book Now
+                  </a>
+                </td>
+              </tr>
+              <% }) }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      </div>
+      <% } %>
     </main>
   </body>
 </html>
