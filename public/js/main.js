@@ -1,4 +1,48 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const today = new Date().toISOString().split("T")[0];
+  const startInput = document.getElementById("startDate");
+  const endInput = document.getElementById("endDate");
+
+  if (startInput) startInput.min = today;
+  if (endInput) endInput.min = today;
+
+  const form = document.getElementById("trip-form");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      const startDate = startInput.value;
+      const endDate = endInput.value;
+
+      const startError = document.getElementById("error-startDate");
+      const endError = document.getElementById("error-endDate");
+
+      let hasError = false;
+      startError.classList.add("hidden");
+      endError.classList.add("hidden");
+
+      if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(startDate) ||
+        new Date(startDate) < new Date(today)
+      ) {
+        startError.textContent = "Start Date must be today or later.";
+        startError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(endDate) ||
+        new Date(endDate) < new Date(startDate)
+      ) {
+        endError.textContent = "End Date must be after Start Date.";
+        endError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (hasError) {
+        e.preventDefault();
+      }
+    });
+  }
+
   const interests = new Set();
   const selector = document.getElementById("interest-selector");
   const addBtn = document.getElementById("add-interest");

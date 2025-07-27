@@ -42,8 +42,11 @@ function appendMessage(text, fromUser = true) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+let isWaitingForResponse = false;
+
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  if (isWaitingForResponse) return;
   const question = chatInput.value.trim();
   if (!question) return;
 
@@ -51,6 +54,10 @@ chatForm.addEventListener("submit", (e) => {
   appendMessage(question, true);
   context.push({ role: "user", content: question });
   chatInput.value = "";
+
+  chatButton.disabled = true;
+  isWaitingForResponse = true;
+
 
   // Send to server
   socket.emit("userMessage", { question, context });
@@ -60,4 +67,7 @@ chatForm.addEventListener("submit", (e) => {
 socket.on("agentMessage", ({ answer }) => {
   appendMessage(answer, false);
   context.push({ role: "assistant", content: answer });
+  chatButton.disabled = false;
+  chatInput.focus();
+  isWaitingForResponse = false;
 });

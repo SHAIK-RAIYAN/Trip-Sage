@@ -14,7 +14,6 @@
         <a
           href="/"
           class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-          <!-- Logo SVG here -->
           <img
             src="/Images/traveler-with-a-suitcase-svgrepo-com.png"
             alt="tripsage"
@@ -23,6 +22,7 @@
         </a>
       </div>
     </header>
+
     <main class="flex-1">
       <div class="container mx-auto px-6 py-8">
         <a
@@ -37,11 +37,11 @@
         </div>
       </div>
 
-      <% if (flights && flights.length) { %>
       <div class="container mx-auto px-6 py-4">
         <section class="my-8 px-4">
           <h2 class="text-2xl font-semibold mb-4">Best Flight Options</h2>
           <div class="overflow-x-auto">
+            <% if (flights && flights.length) { %>
             <table
               class="min-w-full bg-white rounded-lg shadow overflow-hidden">
               <thead class="bg-black text-white">
@@ -58,18 +58,14 @@
               </thead>
               <tbody>
                 <% let count = 1; %>
-                <%flights.forEach(group=>{group.flights.forEach(f => { %>
+                <%flights.forEach(group=>{group.flights.forEach(f=>{%>
                 <tr
                   class="<%= (count % 2 === 0) ? 'bg-gray-100' : 'bg-white' %>">
                   <td class="px-6 py-4 font-medium"><%= count++ %></td>
-
-                  <!-- From → To -->
                   <td class="px-6 py-4">
                     <%= f.departure_airport.name %> →
                     <%=f.arrival_airport.name%>
                   </td>
-
-                  <!-- Times -->
                   <td class="px-6 py-4">
                     <%= new
                     Date(f.departure_airport.time).toLocaleTimeString('en-IN', {
@@ -77,12 +73,10 @@
                     Date(f.arrival_airport.time).toLocaleTimeString('en-IN', {
                     hour: '2-digit', minute: '2-digit' }) %>
                   </td>
-
                   <td class="px-6 py-4">₹<%= group.price %></td>
                   <td class="px-6 py-4">
-                    <% const hrs = Math.floor(f.duration / 60); %>
-                    <!---->
-                    <%const mins = f.duration % 60; %> <%= `${hrs}h ${mins}m` %>
+                    <% const hrs = Math.floor(f.duration / 60); const mins =
+                    f.duration % 60; %> <%= `${hrs}h ${mins}m` %>
                   </td>
                   <td class="px-6 py-4 flex items-center gap-2">
                     <img
@@ -96,27 +90,29 @@
                     <a
                       href="https://www.google.com/flights?btn=buy&booking_token=<%= group.booking_token %>"
                       target="_blank"
-                      class="inline-block bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">
-                      Book Now
-                    </a>
+                      class="inline-block bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+                      >Book Now</a
+                    >
                   </td>
                 </tr>
                 <% }) }) %>
               </tbody>
             </table>
+            <% } else { %>
+            <div class="text-center text-gray-600 mt-6 text-lg font-medium">
+              No direct flight options found for your route. You can still
+              explore your itinerary above. ✈️
+            </div>
+            <% } %>
           </div>
         </section>
       </div>
-      <% } %>
+
       <section class="container mx-auto px-4 mt-8 mb-8">
         <h2 class="text-2xl font-semibold mb-4">Ask TripSage</h2>
-
-        <!-- Scrollable Chat Box -->
         <div
           id="chat-box"
           class="bg-white border border-gray-300 rounded-lg p-4 h-80 overflow-y-scroll scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent"></div>
-
-        <!-- Chat Input -->
         <form id="chat-form" class="mt-3 flex gap-2">
           <input
             type="text"
@@ -132,7 +128,8 @@
         </form>
       </section>
     </main>
-    <footer class="bg-white text-black py-4">
+
+    <footer class="bg-white text-black py-4 mt-5">
       <div class="text-center">
         <p class="text-base">
           Made with passion ⚡ by
@@ -147,15 +144,11 @@
       </div>
     </footer>
 
-    <!-- inject the session variables -->
     <script>
       window.__tripData__ = <%- JSON.stringify(tripData || {}) %>;
       window.__itineraryMarkdown__ = <%- JSON.stringify(itineraryMarkdown || "") %>;
     </script>
-
-    <!-- Socket.IO client -->
     <script src="/socket.io/socket.io.js"></script>
-
     <script src="/js/chat.js"></script>
   </body>
 </html>

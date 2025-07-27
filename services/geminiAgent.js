@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-2.5-flash",
 });
 
 exports.generateItinerary = async function (tripData) {
@@ -14,8 +14,12 @@ You're a professional travel agent AI assistant.
 Create a **professionally formatted** and **structured** day-wise travel itinerary in **Markdown syntax**.
 
 Requirements:
-- Use **headings** for each day (e.g., ## Day 1 (01-04-2026)- Arrival)
-- Use **bold text** for time blocks (e.g., **Morning**, **Afternoon**, **Evening**)
+- The journey begins at the user's **source city** on the **start date**.
+- The user **travels to the destination** on the start date.
+- The trip includes daily activities at the **destination**.
+- On the **end date**, the user **returns back to the source**.
+- Use **headings** for each day (e.g., ## Day 1 (01-04-2026) - Arrival)
+- Use **bold text** for Days and time blocks (e.g., **Day 1**, **Morning**, **Afternoon**, **Evening**)
 - Add **newlines between day and time blocks**
 - Use **bullet points** under each time block
 - Add spacing between sections for readability

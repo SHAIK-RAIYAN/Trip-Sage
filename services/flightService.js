@@ -24,13 +24,7 @@ exports.fetchBestFlights = (tripData) => {
             return resolve(result.best_flights);
           }
           // No flights found
-          return reject(
-            new ExpressError(
-              "No flight options found for your route.",
-              404,
-              "FLIGHT_NOT_FOUND"
-            )
-          );
+         return resolve([]);
         }
       );
     } catch (err) {
