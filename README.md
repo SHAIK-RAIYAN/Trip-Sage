@@ -1,10 +1,5 @@
 # TripSage: Your AI-Powered Trip Planning Assistant
 
-[![GitHub License](https://img.shields.io/github/license/SHAIK-RAIYAN/TripSage.svg?style=flat-square)](https://github.com/SHAIK-RAIYAN/TripSage/blob/main/LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/SHAIK-RAIYAN/TripSage.svg?style=flat-square)](https://github.com/SHAIK-RAIYAN/TripSage/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/SHAIK-RAIYAN/TripSage.svg?style=flat-square)](https://github.com/SHAIK-RAIYAN/TripSage/network)
-[![GitHub Issues](https://img.shields.io/github/issues/SHAIK-RAIYAN/TripSage.svg?style=flat-square)](https://github.com/SHAIK-RAIYAN/TripSage/issues)
-
 ## About TripSage
 
 TripSage is a web-based application designed to streamline trip planning by leveraging advanced AI technologies. Users can input their travel preferences, including source, destination, dates, budget, number of travelers, and interests, to receive a personalized, day-wise itinerary. The application also integrates with SerpApi to fetch the best flight options when requested. Additionally, an AI-powered chat assistant, built with Google Generative AI and Socket.IO, provides real-time support for travel-related queries. With a responsive design using Tailwind CSS, TripSage ensures a seamless experience across mobile and desktop devices.
