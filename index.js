@@ -125,12 +125,25 @@ app.post(
       travelers: Number(travelers),
       interests,
     };
-    
+
     if (budget <= 0 || travelers <= 0) {
       throw new ExpressError(
         "Invalid input: Budget and travelers must be positive numbers.",
         400
       );
+    }
+    if (
+      !source ||
+      !destination ||
+      !startDate ||
+      !endDate ||
+      !budget ||
+      !travelers
+    ) {
+      return res.render("index", {
+        formError: true,
+        errorMessage: "Please fill in all required fields.",
+      });
     }
 
     const tripDataFlights = {

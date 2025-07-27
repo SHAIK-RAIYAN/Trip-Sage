@@ -7,8 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (endInput) endInput.min = today;
 
   const form = document.getElementById("trip-form");
+  const loader = document.getElementById("loader-wrapper");
+
   if (form) {
     form.addEventListener("submit", (e) => {
+      if (!form.checkValidity()) {
+        return;
+      }
       const startDate = startInput.value;
       const endDate = endInput.value;
 
@@ -24,6 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const budgetError = document.getElementById("error-budget");
       const travelersError = document.getElementById("error-travelers");
+
+
+      if (loader) loader.style.display = "flex";
 
       // Reset
       budgetError.classList.add("hidden");
@@ -98,5 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
       interests.add(selected);
       renderInterests();
     }
+  });
+
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    if (loader) loader.classList.add("hidden");
   });
 });
