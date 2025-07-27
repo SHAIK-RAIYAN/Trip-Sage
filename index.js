@@ -3,14 +3,43 @@ const path = require("path");
 require("dotenv").config();
 const { marked } = require("marked");
 const sanitizeHtml = require("sanitize-html");
+const http = require("http"); //required for socket.io
+const { Server } = require("socket.io");
 
 // your AI orchestrator (stub for now)
 const { generateItinerary } = require("./services/geminiAgent");
 const { fetchBestFlights } = require("./services/flightService");
+const { chatWithAgent } = require("./services/chatService");
 const getAirportData = require("./utils/getAirportData");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// ------- socket.io Setup -------
+// socket.io - A toolkit that lets your server and the user’s browser talk “live,” back and forth.
+// Socket.IO keeps a channel open so you can push messages immediately when they’re ready. Like being on a phone call instead of sending letters
+
+const server = http.createServer(app); //wraps your web routes in a low‑level server - sets up the call line
+const io = new Server(server); //attaches Socket.IO so it can handle live connections
+
+// Socket.IO chat namespace
+io.of("/chat").on("connection", (socket) => {
+  console.log("🔌 Chat client connected:", socket.id);
+  // Listen for user messages
+  socket.on("userMessage", async ({ question, context }) => {
+    try {
+      // Send incoming question + context to Gemini
+      const answer = await chatWithAgent(question, context);
+      // Emit back to this client, sends the AI’s reply back instantly
+      socket.emit("agentMessage", { answer });
+    } catch (err) {
+      console.error("Chat error:", err);
+      socket.emit("agentMessage", {
+        answer: "Sorry, I hit an error. Please try again.",
+      });
+    }
+  });
+});
 
 // ------- View Engine / Static Setup -------
 app.set("view engine", "ejs");
@@ -91,13 +120,11 @@ app.post("/api/plan", async (req, res) => {
     res.render("itinerary", { itinerary: safeItinerary, flights });
   } catch (err) {
     console.error("TripSage error:", err);
-    return res
-      .status(500)
-      .send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 });
 
 // --- Start Server ---
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`✅ TripSage server running at http://localhost:${PORT}`);
 });
