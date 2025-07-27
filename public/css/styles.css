@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+/* personal stylings */
+#chat-box {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.msg-user {
+  text-align: right;
+  margin-bottom: 0.5rem;
+}
+.msg-agent {
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+.bubble {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  max-width: 75%;
+}
+.bubble-user {
+  background: #1f2937;
+  color: white;
+}
+.bubble-agent {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+#chat-box::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+#chat-box {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
