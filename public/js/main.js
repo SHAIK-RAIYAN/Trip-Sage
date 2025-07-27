@@ -19,6 +19,32 @@ document.addEventListener("DOMContentLoaded", () => {
       startError.classList.add("hidden");
       endError.classList.add("hidden");
 
+      const budgetInput = document.getElementById("budget");
+      const travelersInput = document.getElementById("travelers");
+
+      const budgetError = document.getElementById("error-budget");
+      const travelersError = document.getElementById("error-travelers");
+
+      // Reset
+      budgetError.classList.add("hidden");
+      travelersError.classList.add("hidden");
+
+      if (budgetInput.value <= 0) {
+        budgetError.textContent = "Budget must be greater than 0.";
+        budgetError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (travelersInput.value <= 0) {
+        travelersError.textContent = "Number of travelers must be at least 1.";
+        travelersError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (hasError) {
+        e.preventDefault();
+      }
+
       if (
         !/^\d{4}-\d{2}-\d{2}$/.test(startDate) ||
         new Date(startDate) < new Date(today)

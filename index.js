@@ -125,6 +125,13 @@ app.post(
       travelers: Number(travelers),
       interests,
     };
+    
+    if (budget <= 0 || travelers <= 0) {
+      throw new ExpressError(
+        "Invalid input: Budget and travelers must be positive numbers.",
+        400
+      );
+    }
 
     const tripDataFlights = {
       source: srcData.iata,
@@ -138,6 +145,7 @@ app.post(
     if (includeTransport === "on") {
       flights = await fetchBestFlights(tripDataFlights);
     }
+
 
     // Call your Gemini agent - Generate itinerary markdown
     const markdown = await generateItinerary(tripDataItinerary);
