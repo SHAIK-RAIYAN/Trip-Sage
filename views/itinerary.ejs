@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-50 text-gray-800">
+  <body class="min-h-screen flex flex-col bg-gray-100 text-gray-800">
     <header class="text-gray-600 body-font bg-white shadow fixed-top">
       <div
         class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
@@ -23,11 +23,14 @@
         </a>
       </div>
     </header>
-    <main>
+    <main class="flex-1">
       <div class="container mx-auto px-6 py-8">
-        <a href="/plan-trip" class="text-indigo-600 underline mb-6 inline-block"
-          >← Plan Another Trip</a
-        >
+        <a
+          href="/plan-trip"
+          class="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg shadow hover:bg-gray-800 transition mb-0.5">
+          ← Plan Another Trip
+        </a>
+
         <h1 class="text-3xl font-bold mb-4">Your Trip Itinerary</h1>
         <div class="bg-white p-6 rounded-lg shadow-lg prose max-w-none">
           <%- itinerary %>
@@ -105,7 +108,7 @@
         </section>
       </div>
       <% } %>
-      <section class="container mx-auto px-4 mt-8">
+      <section class="container mx-auto px-4 mt-8 mb-5">
         <h2 class="text-2xl font-semibold mb-4">Ask TripSage</h2>
 
         <!-- Scrollable Chat Box -->
@@ -129,6 +132,20 @@
         </form>
       </section>
     </main>
+    <footer class="bg-white text-black py-4">
+      <div class="text-center">
+        <p class="text-base">
+          Made with passion ⚡ by
+          <a
+            href="https://github.com/SHAIK-RAIYAN"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center space-x-1 ml-1 text-lg font-bold hover:underline">
+            <span>SHAIK RAIYAN</span>
+          </a>
+        </p>
+      </div>
+    </footer>
 
     <!-- inject the session variables -->
     <script>

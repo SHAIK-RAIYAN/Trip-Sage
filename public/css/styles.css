@@ -1,6 +1,30 @@
 @import "tailwindcss";
 
+#selected-interests span {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+#selected-interests span button {
+  color: black;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
 /* personal stylings */
+html{
+  height:100dvh;
+}
+body{
+  min-height: 100%;
+}
+
 #chat-box {
   max-height: 400px;
   overflow-y: auto;

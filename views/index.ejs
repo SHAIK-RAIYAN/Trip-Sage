@@ -7,8 +7,9 @@
     <!-- Tailwind CSS added in styles -->
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="./css/output.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-50 text-gray-800">
+  <body class="flex flex-col bg-gray-100 text-gray-800">
     <header class="text-gray-600 body-font bg-white shadow fixed-top">
       <div
         class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
@@ -25,7 +26,7 @@
       </div>
     </header>
 
-    <main class="container mx-auto px-4 mt-8">
+    <main class="flex-1 container mx-auto px-4 mt-8">
       <div class="bg-white rounded-2xl shadow p-6">
         <h1 class="text-3xl font-semibold mb-6">Plan Your Journey</h1>
         <form
@@ -166,7 +167,7 @@
               <label for="includeTransport" class="font-medium text-gray-800">
                 Include transportation (flights)
               </label>
-              <p class=" text-gray-500 text-xs">
+              <p class="text-gray-500 text-xs">
                 Check this if you'd like TripSage to fetch flight option<s></s>.
               </p>
             </div>
@@ -182,6 +183,20 @@
         </form>
       </div>
     </main>
+    <footer class="bg-white text-black py-4">
+      <div class="text-center">
+        <p class="text-base">
+          Made with passion ⚡ by
+          <a
+            href="https://github.com/SHAIK-RAIYAN"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center space-x-1 ml-1 text-lg font-bold hover:underline">
+            <span>SHAIK RAIYAN</span>
+          </a>
+        </p>
+      </div>
+    </footer>
 
     <script src="/js/main.js"></script>
   </body>
