@@ -130,8 +130,15 @@
       </section>
     </main>
 
-    <script src="/js/chat.js"></script>
+    <!-- inject the session variables -->
+    <script>
+      window.__tripData__ = <%- JSON.stringify(tripData || {}) %>;
+      window.__itineraryMarkdown__ = <%- JSON.stringify(itineraryMarkdown || "") %>;
+    </script>
+
     <!-- Socket.IO client -->
     <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/js/chat.js"></script>
   </body>
 </html>

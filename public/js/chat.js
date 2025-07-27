@@ -6,6 +6,30 @@ const chatInput = document.getElementById("chat-input");
 // Maintain conversation context
 const context = [];
 
+// Inject trip context from session 
+const tripData = window.__tripData__;
+const itinerarySummary = window.__itineraryMarkdown__;
+
+if (tripData && itinerarySummary) {
+  context.push({
+    role: "user",
+    content: `I'm planning a trip from ${tripData.source} to ${
+      tripData.destination
+    } from ${tripData.startDate} to ${tripData.endDate} for ${
+      tripData.travelers
+    } traveler(s), with a budget of ₹${
+      tripData.budget
+    }. I'm interested in ${tripData.interests.join(
+      ", "
+    )}. Can you suggest a good plan?`,
+  });
+
+  context.push({
+    role: "assistant",
+    content: `Sure! Here's the travel plan I generated for the user:\n\n${itinerarySummary}`,
+  });
+}
+
 // Helper to append message bubbles
 function appendMessage(text, fromUser = true) {
   const wrapper = document.createElement("div");

@@ -9,11 +9,22 @@ const { Server } = require("socket.io");
 // your AI orchestrator (stub for now)
 const { generateItinerary } = require("./services/geminiAgent");
 const { fetchBestFlights } = require("./services/flightService");
-const { chatWithAgent } = require("./services/chatService");
+const { startPersistentChat } = require("./services/chatService");
 const getAirportData = require("./utils/getAirportData");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// ------- Express-session -------
+const session = require("express-session");
+app.use(
+  session({
+    secret: process.env.SECRET_SESSION_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 600000 }, // session lasts 10 minutes
+  })
+);
 
 // ------- socket.io Setup -------
 // socket.io - A toolkit that lets your server and the user’s browser talk “live,” back and forth.
@@ -23,14 +34,26 @@ const server = http.createServer(app); //wraps your web routes in a low‑level 
 const io = new Server(server); //attaches Socket.IO so it can handle live connections
 
 // Socket.IO chat namespace
+
 io.of("/chat").on("connection", (socket) => {
   console.log("🔌 Chat client connected:", socket.id);
   // Listen for user messages
+  let chatSession = null; // This will hold the stateful chat session for this connection
   socket.on("userMessage", async ({ question, context }) => {
     try {
-      // Send incoming question + context to Gemini
-      const answer = await chatWithAgent(question, context);
-      // Emit back to this client, sends the AI’s reply back instantly
+      // On the first message, initialize the chat session with the priming history.
+      if (!chatSession) {
+        // The context from the client includes the initial trip details.
+        // We only need the history *before* the user's first question for initialization.
+        const initialHistory = context.slice(0, -1);
+        chatSession = await startPersistentChat(initialHistory);
+      }
+
+      // For the first and all subsequent messages, send the user's question to the chat.
+      const result = await chatSession.sendMessage(question); // The session now correctly maintains the history.
+      const response = await result.response;
+      const answer = response.text();
+
       socket.emit("agentMessage", { answer });
     } catch (err) {
       console.error("Chat error:", err);
@@ -116,8 +139,18 @@ app.post("/api/plan", async (req, res) => {
     const markdown = await generateItinerary(tripDataItinerary);
     const htmlItinerary = marked.parse(markdown); //Converts Markdown to HTML.
     const safeItinerary = sanitizeHtml(htmlItinerary); //Gemini may return malicious HTML sanitize-html strips unsafe tags and attributes
+
+    //Store data in session
+    req.session.tripData = tripDataItinerary;
+    req.session.itineraryMarkdown = markdown;
+
     // Render the view
-    res.render("itinerary", { itinerary: safeItinerary, flights });
+    res.render("itinerary", {
+      itinerary: safeItinerary,
+      flights,
+      tripData: tripDataItinerary,
+      itineraryMarkdown: markdown,
+    });
   } catch (err) {
     console.error("TripSage error:", err);
     return res.status(500).send("Internal Server Error");
