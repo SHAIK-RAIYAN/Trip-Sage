@@ -1,12 +1,13 @@
-const socket = io("/chat");
+const socket = io("/chat", { transports: ["websocket"] });
 const chatBox = document.getElementById("chat-box");
 const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
+const chatButton = chatForm.querySelector("button");
 
 // Maintain conversation context
 const context = [];
 
-// Inject trip context from session 
+// Inject trip context from session
 const tripData = window.__tripData__;
 const itinerarySummary = window.__itineraryMarkdown__;
 
@@ -54,10 +55,9 @@ chatForm.addEventListener("submit", (e) => {
   appendMessage(question, true);
   context.push({ role: "user", content: question });
   chatInput.value = "";
-
+  chatInput.disabled = true;
   chatButton.disabled = true;
   isWaitingForResponse = true;
-
 
   // Send to server
   socket.emit("userMessage", { question, context });
@@ -67,6 +67,7 @@ chatForm.addEventListener("submit", (e) => {
 socket.on("agentMessage", ({ answer }) => {
   appendMessage(answer, false);
   context.push({ role: "assistant", content: answer });
+  chatInput.disabled = false;
   chatButton.disabled = false;
   chatInput.focus();
   isWaitingForResponse = false;
