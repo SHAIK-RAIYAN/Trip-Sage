@@ -1,8 +1,11 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const ExpressError = require("../utils/ExpressError");
 require("dotenv").config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+});
 
 exports.generateItinerary = async function (tripData) {
   const prompt = `
@@ -25,12 +28,29 @@ Trip Details:
 - Travelers: ${tripData.travelers}
 - Interests: ${tripData.interests.join(", ")}
 
-Each day should have a heading (e.g., ## Day 1), followed by bullet points or paragraphs for activities, local experiences, meals, important notes and travel tips. Keep it organized and easy to read.
+Each day should have a heading, followed by bullet points or paragraphs for activities, local experiences, meals, important notes and travel tips. Keep it organized and easy to read.
 Respond only in Markdown. Do not include frontmatter or explanations.
 `;
-  const result = await model.generateContent(prompt);
-  const response = result.response;
-  const itineraryText = response.text(); //Gemini returns Markdown
 
-  return itineraryText;
+  let result;
+  try {
+    result = await model.generateContent(prompt);
+  } catch (err) {
+    throw new ExpressError(
+      "Unable to generate itinerary at this time. Please try again later.",
+      502,
+      "ITINERARY_API_ERROR"
+    );
+  }
+
+  const text = result.response?.text();
+  if (!text || text.length < 20) {
+    throw new ExpressError(
+      "Received an unexpected response from the AI service.",
+      502,
+      "ITINERARY_INVALID_RESPONSE"
+    );
+  }
+
+  return text;
 };

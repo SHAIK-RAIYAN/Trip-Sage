@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Error <%= status %> · TripSage</title>
+    <link rel="stylesheet" href="/css/output.css" />
+  </head>
+  <body
+    class="flex flex-col items-center justify-center h-full bg-gray-100 text-gray-800">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+      <div class="bg-red-600 text-white p-6 text-center">
+        <h1 class="text-6xl font-extrabold">Error <%= status %></h1>
+      </div>
+      <div class="p-8">
+        <p class="text-lg mb-6 text-gray-700"><%= message %></p>
+        <div class="text-center">
+          <a
+            href="/"
+            class="inline-block bg-indigo-600 text-white text-lg font-semibold px-6 py-3 rounded-lg shadow hover:bg-indigo-700 transition">
+            ← Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

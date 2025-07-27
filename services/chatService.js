@@ -8,7 +8,6 @@ const model = genAI.getGenerativeModel({
     "You are TripSage, a travel planning assistant. Keep replies under 100 words but informative",
 });
 
-
 exports.startPersistentChat = async function (context = []) {
   const history = context.map((msg) => ({
     role: msg.role === "assistant" ? "model" : "user",
@@ -19,7 +18,7 @@ exports.startPersistentChat = async function (context = []) {
     history,
     generationConfig: {
       temperature: 0.7,
-      maxOutputTokens: 512,
+      maxOutputTokens: 1024,
     },
   });
 

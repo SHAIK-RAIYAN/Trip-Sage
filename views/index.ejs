@@ -6,8 +6,7 @@
     <title>TripSage · Plan Your Trip</title>
     <!-- Tailwind CSS added in styles -->
     <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="./css/output.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/output.css" />
   </head>
   <body class="flex flex-col bg-gray-100 text-gray-800">
     <header class="text-gray-600 body-font bg-white shadow fixed-top">
@@ -31,7 +30,7 @@
         <h1 class="text-3xl font-semibold mb-6">Plan Your Journey</h1>
         <form
           id="trip-form"
-          action="/api/plan"
+          action="/plan"
           method="POST"
           novalidate
           class="space-y-6">
@@ -48,6 +47,9 @@
                 required
                 placeholder="e.g., Delhi, DL"
                 class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <p id="error-source" class="mt-1 text-red-500 text-sm hidden">
+                Source is required.
+              </p>
             </div>
             <!-- Destination -->
             <div>
@@ -61,6 +63,11 @@
                 required
                 placeholder="e.g., Mumbai"
                 class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <p
+                id="error-destination"
+                class="mt-1 text-red-500 text-sm hidden">
+                Destination is required.
+              </p>
             </div>
           </div>
 
@@ -76,6 +83,9 @@
                 name="startDate"
                 required
                 class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <p id="error-startDate" class="mt-1 text-red-500 text-sm hidden">
+                Start Date is required.
+              </p>
             </div>
             <!-- End Date -->
             <div>
@@ -88,6 +98,9 @@
                 name="endDate"
                 required
                 class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <p id="error-endDate" class="mt-1 text-red-500 text-sm hidden">
+                End Date is required.
+              </p>
             </div>
           </div>
 
@@ -106,6 +119,9 @@
                 step="100"
                 placeholder="e.g., 50000"
                 class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <p id="error-budget" class="mt-1 text-red-500 text-sm hidden">
+                Budget is required.
+              </p>
             </div>
             <!-- Travelers -->
             <div>
@@ -120,6 +136,9 @@
                 min="1"
                 placeholder="e.g., 2"
                 class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <p id="error-travelers" class="mt-1 text-red-500 text-sm hidden">
+                Number of Travelers is required.
+              </p>
             </div>
           </div>
 
@@ -198,6 +217,7 @@
       </div>
     </footer>
 
+    <script src="/js/validation.js"></script>
     <script src="/js/main.js"></script>
   </body>
 </html>

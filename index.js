@@ -6,11 +6,14 @@ const sanitizeHtml = require("sanitize-html");
 const http = require("http"); //required for socket.io
 const { Server } = require("socket.io");
 
-// your AI orchestrator (stub for now)
+//
 const { generateItinerary } = require("./services/geminiAgent");
 const { fetchBestFlights } = require("./services/flightService");
 const { startPersistentChat } = require("./services/chatService");
 const getAirportData = require("./utils/getAirportData");
+const wrapAsync = require("./utils/wrapAsync");
+const ExpressError = require("./utils/ExpressError");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -78,8 +81,9 @@ app.get("/plan-trip", (req, res) => {
 });
 
 // Receive form data, invoke AI, return itinerary
-app.post("/api/plan", async (req, res) => {
-  try {
+app.post(
+  "/plan",
+  wrapAsync(async (req, res) => {
     const {
       source,
       destination,
@@ -151,10 +155,29 @@ app.post("/api/plan", async (req, res) => {
       tripData: tripDataItinerary,
       itineraryMarkdown: markdown,
     });
-  } catch (err) {
-    console.error("TripSage error:", err);
-    return res.status(500).send("Internal Server Error");
+  })
+);
+
+// 404 handler — must come after all other routes
+app.all("/*splat", (req, res, next) => {
+  const err = new Error(`Page not found: ${req.originalUrl}`);
+  err.status = 404;
+  next(err);
+});
+
+// Custom error handler
+app.use((err, req, res, next) => {
+  const { status = 500, message = "Something went wrong" } = err;
+  // Log full error for debugging
+  console.error(`Error ${status}:`, err);
+
+  // If JSON request, send JSON
+  if (req.originalUrl.startsWith("/api/")) {
+    return res.status(status).json({ success: false, error: message });
   }
+
+  // Otherwise, render an EJS error page (create views/error.ejs)
+  return res.status(status).render("error", { status, message });
 });
 
 // --- Start Server ---
